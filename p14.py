@@ -1,19 +1,19 @@
-import functools
+import collections
 import itertools
 
-REFLECTIONS = {
-    '0': '0',
-    '1': '1',
-    '6': '9',
-    '8': '8',
-    '9': '6'
-}
+REFLECTIONS = collections.OrderedDict([
+    ('0', '0'),
+    ('1', '1'),
+    ('6', '9'),
+    ('8', '8'),
+    ('9', '6'),
+])
 
 IDENTITY_REFLECTIONS = [k for k, v in REFLECTIONS.items() if k == v]
 
 
 def mirrorables(size):
-    products = itertools.product(*([REFLECTIONS.keys()] * size))
+    products = itertools.product(*([sorted(REFLECTIONS.keys())] * size))
     return (''.join(s) for s in products)
 
 
@@ -37,3 +37,7 @@ def mirrored():
             for mid in IDENTITY_REFLECTIONS
             if m[0] != '0'
         )
+
+
+def mirrored_short():
+    return (x for x in map(str, range(100001)) if x == x[::-1].translate(str.maketrans('01689', '01986', '23457')))
