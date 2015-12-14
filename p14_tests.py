@@ -48,6 +48,12 @@ class TestShort(unittest.TestCase):
             sorted(map(int, itertools.islice(mirrored(), 50))),
             sorted(map(int, itertools.islice(mirrored_short(), 50))))
 
+
+class TestSolution(unittest.TestCase):
+    def test_solution(self):
+        self.assertEqual(solution(), 99)
+
+
 if __name__ == '__main__':
     unittest.main()
     # print(list(itertools.islice(mirrored(), 10)))

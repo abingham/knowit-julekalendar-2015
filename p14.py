@@ -40,4 +40,12 @@ def mirrored():
 
 
 def mirrored_short():
-    return (x for x in map(str, range(100001)) if x == x[::-1].translate(str.maketrans('01689', '01986', '23457')))
+    return (x for x in map(str, range(100001)) if x == x[::-1].translate(x.maketrans('69', '96', '23457')))
+
+
+def solution():
+    return len([x for x in map(str, range(100001)) if x == x[::-1].translate(x.maketrans('69', '96', '23457'))])
+
+
+if __name__ == '__main__':
+    print(solution())
