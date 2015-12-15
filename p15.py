@@ -1,5 +1,3 @@
-from functools import reduce
-
 MAP = [[34, 21, 32, 41, 25],
        [14, 42, 43, 14, 31],
        [54, 45, 52, 42, 23],
@@ -16,4 +14,3 @@ def solve(m, coord):
             return
 
 print(', '.join(map(str, solve(MAP, 11))))
-
