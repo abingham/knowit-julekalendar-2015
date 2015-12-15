@@ -6,11 +6,11 @@ MAP = [[34, 21, 32, 41, 25],
 
 
 def solve(m, coord):
-    while True:
+    last_coord = None
+    while last_coord != coord:
         yield coord
         row, col = divmod(coord, 10)
         coord, last_coord = m[row - 1][col - 1], coord
-        if last_coord == coord:
-            return
 
-print(', '.join(map(str, solve(MAP, 11))))
+if __name__ == '__main__':
+    print(', '.join(map(str, solve(MAP, 11))))
