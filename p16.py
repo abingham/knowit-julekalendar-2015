@@ -8,16 +8,32 @@ Finn antall forekomster av tallet 2 for n = 12345678987654321
 """
 
 
-def brute_force(n):
-    return sum(str(i).count('2') for i in range(0, n + 1))
+def _count(n, k):
+    if not n:
+        return 0
+
+    size = len(n)
+    hi_order = int(n[:1])
+    total = 0
+
+    n_num = int(n)
+    k_num = int(k)
+
+    if size > 1:
+        total += hi_order * 10 ** (size - 2) * (size - 1)
+    if hi_order > k_num:
+        total += 10 ** (size - 1)
+    elif hi_order == k_num:
+        total += n_num - hi_order * 10 ** (size - 1) + 1
+    return total + _count(n[1:], k)
 
 
-def two_count(n):
-    return brute_force(n)
+def count(n, k):
+    return _count(str(n), str(k))
 
 
 if __name__ == '__main__':
-    print(two_count(12345678987654321))
+    print(count(12345678987654321, 2))
 
 # # rank 10
 # 2
