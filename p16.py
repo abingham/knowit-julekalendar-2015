@@ -8,7 +8,7 @@ Finn antall forekomster av tallet 2 for n = 12345678987654321
 """
 
 
-def _count(n, k):
+def _slow_count(n, k):
     if not n:
         return 0
 
@@ -28,47 +28,40 @@ def _count(n, k):
     return total + _count(n[1:], k)
 
 
-def count(n, k):
+def slow_count(n, k):
     return _count(str(n), str(k))
 
 
+def count(n, k):
+    original = n
+    power = 1
+    i = 0
+    counter = 0
+
+    while n > 0:
+        n, d = divmod(n, 10)
+
+        counter += d * (power * i) // 10
+
+        if d > k:
+            counter += power
+        elif d == k:
+            counter += original % power + 1
+
+        power *= 10
+        i += 1
+
+    return counter
+
+
+def timing():
+    import timeit
+    print('old', timeit.timeit('old_count(12345678987654321, 2)',
+                               globals=globals(),
+                               number=10000))
+    print('new', timeit.timeit('count(12345678987654321, 2)',
+                               globals=globals(),
+                               number=10000))
+
 if __name__ == '__main__':
     print(count(12345678987654321, 2))
-
-# # rank 10
-# 2
-
-# # rank 100
-# 02
-# 12
-# 20 21 22 23 24 25 26 27 28 29
-# 32
-# 42
-# 52
-# 62
-# 72
-# 82
-# 92
-
-# 19
-
-# previous-rank-count * 10 + (previous-rank - 1) * 
-
-# # below 1000
-# 002
-# 012
-# 020 021 022 023 024 . . .
-# 032
-# 042
-# ...
-# 092
-# 102
-# ...
-# 200 201 202 203 204 ... 299
-# 302
-# 312
-# 320 321 322
-
-# so...
-
-# 10 * previous-rank-size + (previous-rank - 1) 
