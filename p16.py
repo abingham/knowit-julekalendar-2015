@@ -25,33 +25,35 @@ def _slow_count(n, k):
         total += 10 ** (size - 1)
     elif hi_order == k_num:
         total += n_num - hi_order * 10 ** (size - 1) + 1
-    return total + _count(n[1:], k)
+    return total + _slow_count(n[1:], k)
 
 
 def slow_count(n, k):
-    return _count(str(n), str(k))
+    return _slow_count(str(n), str(k))
 
 
 def count(n, k):
+    """Count the number of times the digit `k` appears in the decimals numbers
+    from `[0-n]`.
+    """
     original = n
-    power = 1
-    i = 0
-    counter = 0
+    power = 0
+    total = 0
 
     while n > 0:
-        n, d = divmod(n, 10)
+        magnitude = 10 ** power
+        n, lsd = divmod(n, 10)
 
-        counter += d * (power * i) // 10
+        total += lsd * (magnitude * power) // 10
 
-        if d > k:
-            counter += power
-        elif d == k:
-            counter += original % power + 1
+        if lsd > k:
+            total += magnitude
+        elif lsd == k:
+            total += original % magnitude + 1
 
-        power *= 10
-        i += 1
+        power += 1
 
-    return counter
+    return total
 
 
 def timing():

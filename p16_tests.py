@@ -34,11 +34,30 @@ class Tests(unittest.TestCase):
             7)
 
     def test_against_brute_force(self):
-        for i in range(100):
+        for i in range(10):
             val = random.randint(0, 100000)
             self.assertEqual(
                 brute_force(val, 2),
                 count(val, 2))
+
+
+class TestSlow(unittest.TestCase):
+    def test_canned(self):
+        self.assertEqual(
+            slow_count(22, 2),
+            6)
+
+        self.assertEqual(
+            slow_count(23, 2),
+            7)
+
+    def test_against_brute_force(self):
+        for i in range(10):
+            val = random.randint(0, 100000)
+            self.assertEqual(
+                brute_force(val, 2),
+                slow_count(val, 2))
+
 
 if __name__ == '__main__':
     unittest.main()
