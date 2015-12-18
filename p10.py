@@ -49,9 +49,8 @@ def calc_after(prices):
 def best_profit(prices):
     before = calc_before(prices)
     after = calc_after(prices)
-    best = max(before[day] + after[day + 1]
+    return max(before[day] + after[day + 1]
                for day in range(1, len(prices) - 2))
-    return best
 
 
 if __name__ == '__main__':
