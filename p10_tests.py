@@ -1,3 +1,4 @@
+from decimal import Decimal
 import unittest
 
 from p10 import *
@@ -13,7 +14,12 @@ class TestBefore(unittest.TestCase):
 
 
 class TestAfter(unittest.TestCase):
-    pass
+    def test_basic(self):
+        prices = [12, 10, 23, 19, 18]
+        after = calc_after(prices)
+        self.assertListEqual(
+            after,
+            [13, 13, -1, -1, -1])
 
 
 class TestSolution(unittest.TestCase):
@@ -21,7 +27,7 @@ class TestSolution(unittest.TestCase):
         prices = list(read_data("p10_input.txt"))
         self.assertEqual(
             best_profit(prices),
-            89.5850)
+            Decimal('89.5850'))
 
 if __name__ == '__main__':
     unittest.main()

@@ -38,7 +38,7 @@ def calc_before(prices):
 def calc_after(prices):
     after = [prices[-1] - prices[-2]]
 
-    for buy_day in range(-2, -1 * len(prices) - 1, -1):
+    for buy_day in reversed(range(0, len(prices) - 1)):
         buy_price = prices[buy_day]
         max_on_sell_day = max(prices[sell_day] - buy_price
                               for sell_day in range(buy_day + 1, len(prices)))
