@@ -13,7 +13,6 @@ Svaret skal oppgis med fire desimaler, samt bruke punktum som desimalskilletegn.
 """
 
 from decimal import Decimal
-from itertools import islice
 
 
 def read_data(filename):
@@ -21,35 +20,45 @@ def read_data(filename):
         yield from (Decimal(l) for l in map(str.strip, f) if l)
 
 
+def calc_before(prices):
+    before = [prices[1] - prices[0]]
+    for sell_day in range(1, len(prices)):
+        sell_price = prices[sell_day]
+        max_on_sell_day = max(sell_price - prices[buy_day]
+                              for buy_day in range(0, sell_day))
+
+        if before[-1] < max_on_sell_day:
+            before.append(max_on_sell_day)
+        else:
+            before.append(before[-1])
+        assert before[-1] >= before[-2]
+    return before
+
+
+def calc_after(prices):
+    after = [prices[-1] - prices[-2]]
+
+    for buy_day in range(-2, -1 * len(prices) - 1, -1):
+        buy_price = prices[buy_day]
+        max_on_sell_day = max(prices[sell_day] - buy_price
+                              for sell_day in range(buy_day + 1, len(prices)))
+        if after[-1] < max_on_sell_day:
+            after.append(max_on_sell_day)
+        else:
+            after.append(after[-1])
+        assert after [-1] >= after[-2]
+
+    after.reverse()
+    return after
+
+
+def best_profit(prices):
+    before = calc_before(prices)
+    after = calc_after(prices)
+    best = max(before[day] + after[day + 1]
+               for day in range(1, len(prices) - 2))
+    return best
+
+
 prices = list(read_data("p10_input.txt"))
-
-before = [prices[1] - prices[0]]
-for sell_day in range(1, len(prices)):
-    sell_price = prices[sell_day]
-    max_on_sell_day = max(sell_price - prices[buy_day]
-                          for buy_day in range(0, sell_day))
-
-    if before[-1] < max_on_sell_day:
-        before.append(max_on_sell_day)
-    else:
-        before.append(before[-1])
-    assert before[-1] >= before[-2]
-
-after = [prices[-1] - prices[-2]]
-
-for buy_day in range(-2, -1 * len(prices) - 1, -1):
-    buy_price = prices[buy_day]
-    max_on_sell_day = max(prices[sell_day] - buy_price
-                          for sell_day in range(buy_day + 1, len(prices)))
-    if after[-1] < max_on_sell_day:
-        after.append(max_on_sell_day)
-    else:
-        after.append(after[-1])
-    assert after [-1] >= after[-2]
-
-after.reverse()
-
-best = max(before[day] + after[day + 1]
-           for day in range(1, len(prices) - 2))
-
-print(best)
+print(best_profit(prices))
