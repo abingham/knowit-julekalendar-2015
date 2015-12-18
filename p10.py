@@ -13,6 +13,8 @@ Svaret skal oppgis med fire desimaler, samt bruke punktum som desimalskilletegn.
 """
 
 from decimal import Decimal
+from functools import reduce
+from itertools import accumulate
 
 
 def read_data(filename):
@@ -21,35 +23,27 @@ def read_data(filename):
 
 
 def calc_before(prices):
-    before = [prices[1] - prices[0]]
-    for sell_day in range(1, len(prices)):
-        sell_price = prices[sell_day]
-        max_on_sell_day = max(sell_price - prices[buy_day]
-                              for buy_day in range(0, sell_day))
+    """Calculate the max profits for transactions completed on or before
+    each day."""
 
-        if before[-1] < max_on_sell_day:
-            before.append(max_on_sell_day)
-        else:
-            before.append(before[-1])
-        assert before[-1] >= before[-2]
-    return before
+    mins = list(accumulate(prices, min))
+    return reduce(lambda b, s: b + [max(prices[s] - mins[s - 1], b[-1])],
+                  range(1, len(prices)),
+                  [prices[1] - prices[0]])
 
 
 def calc_after(prices):
-    after = [prices[-1] - prices[-2]]
+    """Calculate the max profits for transactions started on or after
+    each day."""
 
-    for buy_day in reversed(range(0, len(prices) - 1)):
-        buy_price = prices[buy_day]
-        max_on_sell_day = max(prices[sell_day] - buy_price
-                              for sell_day in range(buy_day + 1, len(prices)))
-        if after[-1] < max_on_sell_day:
-            after.append(max_on_sell_day)
-        else:
-            after.append(after[-1])
-        assert after [-1] >= after[-2]
+    maxs = list(accumulate(reversed(prices), max))
+    maxs.reverse()
 
-    after.reverse()
-    return after
+    result = reduce(lambda a, b: a + [max(maxs[b + 1] - prices[b], a[-1])],
+                    reversed(range(0, len(prices) - 1)),
+                    [prices[-1] - prices[-2]])
+    result.reverse()
+    return result
 
 
 def best_profit(prices):
