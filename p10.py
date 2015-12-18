@@ -60,5 +60,6 @@ def best_profit(prices):
     return best
 
 
-prices = list(read_data("p10_input.txt"))
-print(best_profit(prices))
+if __name__ == '__main__':
+    prices = list(read_data("p10_input.txt"))
+    print(best_profit(prices))
