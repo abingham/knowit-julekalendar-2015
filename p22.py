@@ -13,7 +13,10 @@ Hva er det minste antallet operasjoner som trengs for å konverte strengen  "evd
 
 
 def convert(word):
-    return sum(abs(ord(a) - ord(b)) for a, b in zip(word[:len(word) // 2], word[-1:0:-1]))
+    return sum(abs(ord(a) - ord(b))
+               for a, b
+               in zip(word[:len(word) // 2],
+                      reversed(word)))
 
 
 if __name__ == '__main__':
