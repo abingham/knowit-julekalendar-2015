@@ -10,9 +10,10 @@ class Tests(unittest.TestCase):
     """
 
     def test_canned(self):
-        g = build_graph(["peel", "poll", "ping", "push", "pool"])
-        d = dijkstra(g, "pull")
-        print(d)
+        g = build_graph(["pull", "peel", "poll", "ping", "push", "pool"])
+        cost, path = dijkstra(g, "pull", "pool")
+        self.assertListEqual(list(path), ["pull", "poll", "pool"])
+        self.assertEqual(len(path), 3)
 
 if __name__ == '__main__':
     unittest.main()
