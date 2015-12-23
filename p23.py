@@ -20,16 +20,24 @@ from math import ceil
 INPUT = [23, 74, 26, 23, 92, 92, 44, 13, 34, 23, 69, 4, 19, 94, 94, 38, 14, 9, 51, 98, 72, 46, 17, 25, 21, 87, 99, 50, 59, 53, 82, 24, 93, 16, 88, 52, 14, 38, 27, 7, 18, 81, 13, 75, 80, 11, 29, 39, 37, 78, 55, 17, 78, 12, 77, 84, 63, 29, 68, 32, 17, 55, 31, 30, 3, 17, 99, 6, 45, 81, 75, 31, 50, 93, 66, 98, 94, 59, 68, 30, 98, 57, 83, 75, 68, 85, 98, 76, 91, 23, 53, 42, 72, 77]
 
 
-def cut_count(l):
+def _cut_count(l):
     max_input = max(l)
-    expiries = [0] * (ceil(max_input / 2) + 1)
+    last_cut = [0] * (ceil(max_input / 2) + 1)
     for i in l:
-        expiries[ceil(i / 2)] += 1
-    pops = [len(l)] * len(expiries)
-    for i in range(1, len(expiries)):
-        pops[i] = pops[i - 1] - expiries[i]
-    return pops
+        last_cut[ceil(i / 2) - 1] += 1
+    pop = len(l)
+    lc_iter = iter(last_cut)
 
+    while pop > 0:
+        yield pop
+        pop = pop - next(lc_iter)
+
+
+def cut_count(l):
+    l = sorted(l)
+    while l:
+        yield len(l)
+        l = [i - l[0] for i in l if i > l[0]]
 
 if __name__ == '__main__':
-    print(', '.join(str(i) for i in cut_count(INPUT)))
+    print(','.join(str(i) for i in cut_count(INPUT)))
